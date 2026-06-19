@@ -1,0 +1,144 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --glass-bg: rgba(255, 255, 255, 0.06);
+  --glass-bg-strong: rgba(255, 255, 255, 0.1);
+  --glass-border: rgba(255, 255, 255, 0.12);
+  --glass-highlight: rgba(255, 255, 255, 0.35);
+  color-scheme: dark;
+}
+
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: 'Inter', -apple-system, system-ui, sans-serif;
+  background: #06080f;
+  color: #eef2ff;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* ---------- Living gradient backdrop ---------- */
+.aurora {
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  overflow: hidden;
+  background:
+    radial-gradient(1200px 800px at 10% -10%, rgba(86, 176, 255, 0.18), transparent 60%),
+    radial-gradient(1000px 700px at 110% 10%, rgba(155, 140, 255, 0.16), transparent 55%),
+    radial-gradient(900px 900px at 50% 120%, rgba(62, 230, 208, 0.12), transparent 60%),
+    linear-gradient(180deg, #080b14 0%, #06080f 100%);
+}
+.aurora::before,
+.aurora::after {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.55;
+  will-change: transform;
+}
+.aurora::before {
+  width: 46vmax;
+  height: 46vmax;
+  left: -10vmax;
+  top: -8vmax;
+  background: radial-gradient(circle at 30% 30%, #3ee6d0, transparent 70%);
+  animation: drift 24s ease-in-out infinite;
+}
+.aurora::after {
+  width: 40vmax;
+  height: 40vmax;
+  right: -12vmax;
+  bottom: -10vmax;
+  background: radial-gradient(circle at 70% 70%, #9b8cff, transparent 70%);
+  animation: drift 30s ease-in-out infinite reverse;
+}
+.aurora-grain {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.04;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+@keyframes drift {
+  0% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(6vmax, -4vmax) scale(1.12); }
+  66% { transform: translate(-5vmax, 3vmax) scale(0.94); }
+  100% { transform: translate(0, 0) scale(1); }
+}
+
+/* ---------- Liquid glass surface ---------- */
+.glass {
+  position: relative;
+  background: var(--glass-bg);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border: 1px solid var(--glass-border);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.37), inset 0 1px 0 0 rgba(255, 255, 255, 0.08);
+}
+.glass-strong {
+  background: var(--glass-bg-strong);
+  backdrop-filter: blur(36px) saturate(200%);
+  -webkit-backdrop-filter: blur(36px) saturate(200%);
+}
+/* specular top highlight — the hallmark of Apple's liquid glass */
+.glass-spec::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(
+    150deg,
+    rgba(255, 255, 255, 0.5),
+    rgba(255, 255, 255, 0.05) 30%,
+    transparent 55%,
+    rgba(255, 255, 255, 0.08) 100%
+  );
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+/* ---------- Utilities ---------- */
+.text-gradient {
+  background: linear-gradient(120deg, #fff, #b9c6ff 60%, #7fe9dd);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.12); border-radius: 8px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.22); }
+
+.safe-bottom { padding-bottom: max(env(safe-area-inset-bottom), 0px); }
+.safe-top { padding-top: max(env(safe-area-inset-top), 0px); }
+
+/* recharts polish */
+.recharts-cartesian-axis-tick-value { fill: rgba(238, 242, 255, 0.45); font-size: 11px; }
+.recharts-default-tooltip {
+  background: rgba(16, 22, 38, 0.85) !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  border-radius: 14px !important;
+  backdrop-filter: blur(16px);
+}
