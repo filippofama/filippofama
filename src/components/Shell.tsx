@@ -12,7 +12,7 @@ import {
   User,
 } from 'lucide-react'
 import type { ReactNode } from 'react'
-import { user } from '../data/mock'
+import { useData } from '../context/DataContext'
 
 const nav = [
   { to: '/', label: 'Oggi', icon: Home },
@@ -29,6 +29,7 @@ const primaryMobile = nav.filter((n) => ['/', '/activities', '/health', '/traini
 
 export function Shell({ children }: { children: ReactNode }) {
   const location = useLocation()
+  const { user, status } = useData()
 
   return (
     <div className="min-h-full">
@@ -80,7 +81,13 @@ export function Shell({ children }: { children: ReactNode }) {
             </div>
             <div className="min-w-0">
               <p className="truncate text-sm font-semibold">{user.name}</p>
-              <p className="truncate text-[11px] text-white/40">🔥 {user.streak} giorni di streak</p>
+              {status === 'connected' ? (
+                <p className="flex items-center gap-1.5 truncate text-[11px] text-glow-lime">
+                  <span className="h-1.5 w-1.5 rounded-full bg-glow-lime" /> Garmin collegato
+                </p>
+              ) : (
+                <p className="truncate text-[11px] text-white/40">Modalità demo</p>
+              )}
             </div>
           </div>
         </div>

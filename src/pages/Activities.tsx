@@ -17,7 +17,8 @@ import {
 import { Glass, GlassButton } from '../components/Glass'
 import { SeriesArea } from '../components/Charts'
 import { PageHeader, Stagger, staggerItem } from '../components/ui'
-import { activities, type Activity } from '../data/mock'
+import { useData } from '../context/DataContext'
+import { type Activity } from '../data/mock'
 
 const typeIcon: Record<Activity['type'], typeof Bike> = {
   Corsa: Footprints,
@@ -41,6 +42,7 @@ const fmtDate = (iso: string) =>
   new Date(iso).toLocaleDateString('it-IT', { weekday: 'short', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })
 
 export function Activities() {
+  const { activities } = useData()
   return (
     <div>
       <PageHeader
@@ -105,6 +107,7 @@ function Stat({ label, value }: { label: string; value: string }) {
 
 export function ActivityDetail() {
   const { id } = useParams()
+  const { activities } = useData()
   const a = activities.find((x) => x.id === id)
   if (!a) return <div className="p-8 text-center text-white/50">Attività non trovata.</div>
   const Icon = typeIcon[a.type]

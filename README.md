@@ -29,14 +29,29 @@ L'estetica è ispirata al **Liquid Glass di Apple**: superfici translucide e sfo
 - Transizioni di pagina con blur+fade, indicatori di navigazione con `layoutId` (morphing fluido)
 - Palette: aqua · sky · violet · coral · amber · lime su fondo notte profonda
 
+## 🔗 Accesso con account Garmin (dati reali)
+
+Garmin **non offre un login OAuth pubblico** per i consumatori: l'unica API ufficiale (Garmin Health API) richiede una partnership aziendale approvata. Per collegare i tuoi dati reali, Auralis include un piccolo **backend** (`server/index.mjs`) che effettua il login a Garmin Connect con le tue credenziali — emulando il flusso SSO ufficiale tramite la libreria [`garmin-connect`](https://www.npmjs.com/package/garmin-connect).
+
+- 🔐 **Le credenziali non vengono mai salvate**: servono solo per ottenere un token di sessione, tenuto in memoria sul backend e scartato dopo 12 ore.
+- 🧪 È un metodo **non ufficiale** (zona grigia rispetto ai ToS Garmin), lo stesso usato da molte app di terze parti.
+- 📲 La **verifica a due fattori (2FA)** non è ancora supportata dal login diretto.
+- 🟢 Senza login l'app parte comunque in **modalità demo** con dati realistici.
+
+Quando avvii con `npm run dev`, partono insieme la web app e il backend. Apri l'app, inserisci email e password Garmin nella schermata di accesso, e i tuoi dati (passi, frequenza cardiaca, Body Battery, stress, sonno, attività, peso, idratazione) vengono scaricati e mostrati. Puoi disconnetterti da **Profilo → Disconnetti account Garmin**.
+
 ## 🚀 Avvio
 
 ```bash
 npm install
-npm run dev        # sviluppo (http://localhost:5173)
+npm run dev        # web (http://localhost:5173) + backend Garmin (http://localhost:8787)
+npm run dev:web    # solo la web app (modalità demo)
+npm run server     # solo il backend
 npm run build      # build di produzione
 npm run preview    # anteprima della build
 ```
+
+> Il backend richiede accesso di rete a `sso.garmin.com` e `connect.garmin.com`. Sul tuo computer funziona; in ambienti con egress di rete ristretto il login Garmin potrebbe essere bloccato (l'app resta usabile in demo).
 
 ### Installare sul telefono / computer
 1. Apri l'app nel browser (Safari su iOS, Chrome su Android/desktop)

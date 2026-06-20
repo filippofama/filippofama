@@ -7,15 +7,16 @@ import {
   Moon,
   Share2,
   Shield,
+  LogOut,
   Smartphone,
   Watch,
 } from 'lucide-react'
 import { Glass } from '../components/Glass'
 import { PageHeader } from '../components/ui'
-import { user } from '../data/mock'
+import { useData } from '../context/DataContext'
 
-const settings = [
-  { icon: Watch, label: 'Dispositivo & sincronizzazione', value: user.device },
+const buildSettings = (device: string) => [
+  { icon: Watch, label: 'Dispositivo & sincronizzazione', value: device },
   { icon: Bell, label: 'Notifiche', value: 'Attive' },
   { icon: Heart, label: 'Zone di frequenza cardiaca', value: 'Personalizzate' },
   { icon: Moon, label: 'Finestra del sonno', value: '23:00 – 07:00' },
@@ -25,6 +26,9 @@ const settings = [
 ]
 
 export function Profile() {
+  const { user, status, logout, syncing } = useData()
+  const connected = status === 'connected'
+  const settings = buildSettings(user.device)
   return (
     <div>
       <PageHeader title="Profilo" subtitle="Account, dispositivi e preferenze" />
@@ -47,18 +51,30 @@ export function Profile() {
         </button>
       </Glass>
 
-      {/* Connected device card */}
+      {/* Garmin connection card */}
       <Glass className="mb-4 flex items-center gap-4 p-5">
         <span className="grid h-12 w-12 place-items-center rounded-2xl bg-gradient-to-br from-glow-aqua/30 to-glow-sky/20">
           <Smartphone size={22} className="text-glow-aqua" />
         </span>
         <div className="flex-1">
-          <p className="font-semibold">{user.device}</p>
-          <p className="text-xs text-white/45">Batteria 82% · Sincronizzato 2 min fa</p>
+          <p className="font-semibold">{connected ? 'Garmin Connect' : 'Nessun account collegato'}</p>
+          <p className="text-xs text-white/45">
+            {connected
+              ? syncing
+                ? 'Sincronizzazione in corso…'
+                : 'Dati reali sincronizzati'
+              : 'Stai usando i dati dimostrativi'}
+          </p>
         </div>
-        <span className="flex items-center gap-1.5 rounded-full bg-glow-lime/15 px-3 py-1 text-xs text-glow-lime">
-          <span className="h-1.5 w-1.5 rounded-full bg-glow-lime" /> Connesso
-        </span>
+        {connected ? (
+          <span className="flex items-center gap-1.5 rounded-full bg-glow-lime/15 px-3 py-1 text-xs text-glow-lime">
+            <span className="h-1.5 w-1.5 rounded-full bg-glow-lime" /> Connesso
+          </span>
+        ) : (
+          <span className="flex items-center gap-1.5 rounded-full bg-white/8 px-3 py-1 text-xs text-white/55">
+            Demo
+          </span>
+        )}
       </Glass>
 
       <Glass className="divide-y divide-white/6 overflow-hidden p-2">
@@ -71,6 +87,13 @@ export function Profile() {
           </button>
         ))}
       </Glass>
+
+      <button
+        onClick={logout}
+        className="mt-4 flex w-full items-center justify-center gap-2 rounded-2xl border border-glow-coral/25 bg-glow-coral/10 py-3.5 text-sm font-medium text-glow-coral transition-colors hover:bg-glow-coral/16"
+      >
+        <LogOut size={17} /> {connected ? 'Disconnetti account Garmin' : 'Torna alla schermata di accesso'}
+      </button>
 
       <p className="mt-6 text-center text-xs text-white/30">Auralis v1.0 · Progettato con cura · Liquid Glass UI</p>
     </div>

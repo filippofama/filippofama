@@ -3,9 +3,10 @@ import { Glass } from '../components/Glass'
 import { Gauge } from '../components/ProgressRing'
 import { AreaTrend } from '../components/Charts'
 import { PageHeader } from '../components/ui'
-import { body } from '../data/mock'
+import { useData } from '../context/DataContext'
 
 export function Body() {
+  const { body } = useData()
   return (
     <div>
       <PageHeader title="Corpo & Composizione" subtitle="Peso, massa e idratazione nel tempo" />

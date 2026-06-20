@@ -17,13 +17,8 @@ import { Glass, GlassButton } from '../components/Glass'
 import { Gauge, ProgressRing } from '../components/ProgressRing'
 import { AreaTrend } from '../components/Charts'
 import { MetricTile, Stagger, staggerItem } from '../components/ui'
-import {
-  bodyBatteryDay,
-  insights,
-  sleep,
-  today,
-  user,
-} from '../data/mock'
+import { insights } from '../data/mock'
+import { useData } from '../context/DataContext'
 
 const greeting = () => {
   const h = new Date().getHours()
@@ -33,6 +28,7 @@ const greeting = () => {
 }
 
 export function Dashboard() {
+  const { today, sleep, bodyBatteryDay, user } = useData()
   const rings = [
     { value: today.calories.active, goal: 700, color: '#ff7a8a' },
     { value: today.intensityMin.value, goal: today.intensityMin.goal, color: '#a6e85a' },

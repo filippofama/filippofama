@@ -3,10 +3,11 @@ import { Glass } from '../components/Glass'
 import { Gauge } from '../components/ProgressRing'
 import { AreaTrend } from '../components/Charts'
 import { PageHeader, useSegment } from '../components/ui'
-import { bodyBatteryDay, heartRateDay, stressDay, today } from '../data/mock'
+import { useData } from '../context/DataContext'
 
 export function Health() {
-  const { value: range, control } = useSegment(['Giorno', 'Settimana', 'Mese'])
+  const { today, bodyBatteryDay, stressDay, heartRateDay } = useData()
+  const { control } = useSegment(['Giorno', 'Settimana', 'Mese'])
 
   return (
     <div>

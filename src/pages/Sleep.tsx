@@ -3,10 +3,11 @@ import { Glass } from '../components/Glass'
 import { Gauge } from '../components/ProgressRing'
 import { Bars } from '../components/Charts'
 import { PageHeader } from '../components/ui'
-import { sleep } from '../data/mock'
+import { useData } from '../context/DataContext'
 import { motion } from 'framer-motion'
 
 export function Sleep() {
+  const { sleep } = useData()
   const total = sleep.stages.reduce((a, s) => a + s.minutes, 0)
   return (
     <div>
