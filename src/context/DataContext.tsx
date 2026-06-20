@@ -16,6 +16,8 @@ type DataShape = {
   sleep: typeof mock.sleep
   body: typeof mock.body
   activities: Activity[]
+  training: typeof mock.training
+  records: typeof mock.records
   bodyBatteryDay: typeof mock.bodyBatteryDay
   stressDay: typeof mock.stressDay
   heartRateDay: typeof mock.heartRateDay
@@ -51,11 +53,13 @@ export function DataProvider({ children }: { children: ReactNode }) {
   const sync = useCallback(async () => {
     setSyncing(true)
     try {
-      const [today, activitiesRaw, sleep, body] = await Promise.all([
+      const [today, activitiesRaw, sleep, body, training, records] = await Promise.all([
         api.today().catch(() => null),
         api.activities().catch(() => []),
         api.sleep().catch(() => null),
         api.body().catch(() => null),
+        api.training().catch(() => null),
+        api.records().catch(() => []),
       ])
 
       const activities: Activity[] = (activitiesRaw || [])
@@ -66,11 +70,15 @@ export function DataProvider({ children }: { children: ReactNode }) {
       const mergedToday = today ? { ...mock.today, ...stripEmpty(today) } : mock.today
       const mergedSleep = sleep && sleep.durationH ? { ...mock.sleep, ...stripEmpty(sleep) } : mock.sleep
       const mergedBody = body && body.weightKg ? { ...mock.body, ...stripEmpty(body) } : mock.body
+      const mergedTraining = training ? { ...mock.training, ...stripEmpty(training) } : mock.training
+      if (training?.vo2max) mergedToday.vo2max = training.vo2max
 
       setLive({
         today: mergedToday,
         sleep: mergedSleep,
         body: mergedBody,
+        training: mergedTraining,
+        records: records?.length ? records : mock.records,
         activities: activities.length ? activities : mock.activities,
         bodyBatteryDay: today?.bodyBatteryDay?.length ? today.bodyBatteryDay : mock.bodyBatteryDay,
         stressDay: today?.stressDay?.length ? today.stressDay : mock.stressDay,
@@ -127,6 +135,8 @@ export function DataProvider({ children }: { children: ReactNode }) {
     sleep: live.sleep || mock.sleep,
     body: live.body || mock.body,
     activities: live.activities || mock.activities,
+    training: live.training || mock.training,
+    records: live.records || mock.records,
     bodyBatteryDay: live.bodyBatteryDay || mock.bodyBatteryDay,
     stressDay: live.stressDay || mock.stressDay,
     heartRateDay: live.heartRateDay || mock.heartRateDay,

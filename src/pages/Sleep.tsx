@@ -6,6 +6,15 @@ import { PageHeader } from '../components/ui'
 import { useData } from '../context/DataContext'
 import { motion } from 'framer-motion'
 
+function SleepStat({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="rounded-xl bg-white/4 p-2.5 text-center">
+      <p className="text-sm font-bold">{value}</p>
+      <p className="text-[10px] text-white/40">{label}</p>
+    </div>
+  )
+}
+
 export function Sleep() {
   const { sleep } = useData()
   const total = sleep.stages.reduce((a, s) => a + s.minutes, 0)
@@ -23,6 +32,12 @@ export function Sleep() {
               <div className="flex items-center gap-2 text-sm"><Activity size={15} className="text-glow-aqua" /><span className="text-white/55">Durata</span><span className="ml-auto font-semibold">{sleep.durationH} h</span></div>
               <div className="flex items-center gap-2 text-sm"><Heart size={15} className="text-glow-coral" /><span className="text-white/55">FC riposo</span><span className="ml-auto font-semibold">{sleep.restingHr} bpm</span></div>
             </div>
+          </div>
+          <div className="mt-5 grid grid-cols-4 gap-2">
+            <SleepStat label="SpO₂" value={`${sleep.spo2Avg}%`} />
+            <SleepStat label="Respiro" value={`${sleep.respirationAvg}`} />
+            <SleepStat label="Irrequietezza" value={sleep.restlessness} />
+            <SleepStat label="Fabbisogno" value={`${sleep.sleepNeedH}h`} />
           </div>
         </Glass>
 

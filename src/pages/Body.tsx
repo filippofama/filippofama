@@ -45,7 +45,30 @@ export function Body() {
             <p className="mt-1 flex items-center gap-1 text-xs text-white/45"><Droplets size={12} /> Idratazione</p>
           </Glass>
         </div>
+
+        {/* Full body composition */}
+        <Glass className="col-span-12 p-6">
+          <h3 className="mb-4 text-sm font-semibold text-white/80">Composizione corporea completa</h3>
+          <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
+            <Comp label="Acqua corporea" value={`${body.bodyWater}%`} color="#56b0ff" />
+            <Comp label="Massa ossea" value={`${body.boneMassKg} kg`} color="#9b8cff" />
+            <Comp label="Massa muscolare" value={`${body.muscleKg} kg`} color="#3ee6d0" />
+            <Comp label="Grasso viscerale" value={`${body.visceralFat}`} color="#ffc15e" />
+            <Comp label="Età metabolica" value={`${body.metabolicAge} anni`} color="#a6e85a" />
+            <Comp label="Physique rating" value={`${body.physiqueRating}`} color="#ff7a8a" />
+          </div>
+        </Glass>
       </div>
+    </div>
+  )
+}
+
+function Comp({ label, value, color }: { label: string; value: string; color: string }) {
+  return (
+    <div className="rounded-2xl bg-white/4 p-4">
+      <div className="mb-2 h-1 w-6 rounded-full" style={{ background: color }} />
+      <p className="text-xl font-bold tabular-nums">{value}</p>
+      <p className="mt-0.5 text-[11px] text-white/45">{label}</p>
     </div>
   )
 }

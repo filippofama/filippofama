@@ -2,9 +2,11 @@ import { Award, Flame, Trophy, Users } from 'lucide-react'
 import { motion } from 'framer-motion'
 import { Glass } from '../components/Glass'
 import { PageHeader, Stagger, staggerItem, useSegment } from '../components/ui'
-import { badges, challenges, feed, records } from '../data/mock'
+import { badges, challenges, feed } from '../data/mock'
+import { useData } from '../context/DataContext'
 
 export function Challenges() {
+  const { records } = useData()
   const { value: tab, control } = useSegment(['Sfide', 'Badge', 'Record', 'Feed'])
 
   return (

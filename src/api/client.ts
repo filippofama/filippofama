@@ -49,4 +49,6 @@ export const api = {
   activities: () => req<any[]>('/api/activities'),
   sleep: () => req<any>('/api/sleep'),
   body: () => req<any>('/api/body'),
+  training: () => req<any>('/api/training'),
+  records: () => req<any[]>('/api/records'),
 }
