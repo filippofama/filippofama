@@ -8,9 +8,13 @@
 import express from 'express'
 import cors from 'cors'
 import crypto from 'node:crypto'
+import path from 'node:path'
+import fs from 'node:fs'
+import { fileURLToPath } from 'node:url'
 import pkg from 'garmin-connect'
 const { GarminConnect } = pkg
 
+const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const app = express()
 app.use(cors())
 app.use(express.json())
@@ -352,4 +356,17 @@ app.post('/api/logout', guard, (req, res) => {
 
 app.get('/api/health-check', (_req, res) => res.json({ ok: true, sessions: sessions.size }))
 
-app.listen(PORT, () => console.log(`\n  Auralis · Garmin bridge in ascolto su http://localhost:${PORT}\n`))
+// Serve the built UI so the desktop app (Electron) runs everything from a
+// single local origin — no browser, no separate static host. Skipped in dev,
+// where Vite serves the UI with hot reload.
+const distDir = path.join(__dirname, '..', 'dist')
+const indexHtml = path.join(distDir, 'index.html')
+if (fs.existsSync(indexHtml)) {
+  app.use(express.static(distDir))
+  app.get('*', (req, res, next) => {
+    if (req.path.startsWith('/api')) return next()
+    res.sendFile(indexHtml)
+  })
+}
+
+app.listen(PORT, () => console.log(`\n  Auralis · in ascolto su http://localhost:${PORT}\n`))

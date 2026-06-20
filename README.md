@@ -2,7 +2,7 @@
 
 > Il tuo corpo, finalmente compreso. Una companion app fitness & salute progettata per far sembrare Garmin Connect un reperto archeologico.
 
-Auralis è una **Progressive Web App** installabile su **telefono e computer**: nessuno store, nessuna attesa. La apri nel browser, la "Aggiungi alla schermata Home" e diventa un'app a tutti gli effetti, offline-ready.
+Auralis gira come **vera app desktop** (Electron, con `.dmg`/`.exe` da doppio clic) e come **Progressive Web App** installabile su **telefono e computer**: nessuno store, nessuna attesa. Sul desktop il backend Garmin è incluso nell'app; sul telefono la apri nel browser e la "Aggiungi alla schermata Home".
 
 L'estetica è ispirata al **Liquid Glass di Apple**: superfici translucide e sfocate, bordi con riflessi speculari, uno sfondo "aurora" che respira lentamente e micro-animazioni a molla su ogni interazione.
 
@@ -40,10 +40,26 @@ Garmin **non offre un login OAuth pubblico** per i consumatori: l'unica API uffi
 
 Quando avvii con `npm run dev`, partono insieme la web app e il backend. Apri l'app, inserisci email e password Garmin nella schermata di accesso, e i tuoi dati (passi, frequenza cardiaca, Body Battery, stress, sonno, attività, peso, idratazione) vengono scaricati e mostrati. Puoi disconnetterti da **Profilo → Disconnetti account Garmin**.
 
-## 🚀 Avvio
+## 🖥️ App desktop (consigliato)
+
+Auralis è anche una **vera app desktop** (Electron): una finestra nativa, niente browser, con il backend Garmin incluso dentro l'app. Apri con doppio clic e basta.
 
 ```bash
 npm install
+npm run app            # avvia l'app in sviluppo (finestra nativa + hot reload)
+npm run app:preview    # build + apre l'app come in produzione
+npm run app:build:mac  # crea il .dmg per macOS  → cartella release/
+npm run app:build:win  # crea l'installer .exe per Windows
+npm run app:build      # pacchetto per il sistema corrente
+```
+
+Dopo `app:build:mac` trovi `Auralis-1.0.0.dmg` (e l'app) nella cartella **`release/`**: aprilo, trascina Auralis nelle Applicazioni e lancialo come qualsiasi app. Il server Garmin parte automaticamente dentro l'app — nessun terminale da tenere aperto.
+
+> macOS richiede di compilare il `.dmg` **su un Mac**; l'installer Windows va creato su Windows (o con gli strumenti di cross-build di electron-builder).
+
+## 🌐 Avvio come web app
+
+```bash
 npm run dev        # web (http://localhost:5173) + backend Garmin (http://localhost:8787)
 npm run dev:web    # solo la web app (modalità demo)
 npm run server     # solo il backend
